@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace DiscordExecutor.functions
 {
-    class GiveRole
+    class ChangeChannelName
     {
         Program p = new Program();
-        /////////////////
-        //  GIVE ROLE  //
-        /////////////////
-        public async Task GiveRoleFunc()
+        ///////////////////
+        //  Change Name  //
+        ///////////////////
+        public async Task ChangeChannelNameFunc()
         {
             ulong guildId = 0;
-            ulong userId = 0;
-            ulong roleId = 0;
+            ulong channelId = 0;
+            string name = "";
             Console.Write("Guild ID: ");
             try
             {
@@ -32,29 +32,29 @@ namespace DiscordExecutor.functions
                 Console.Clear();
                 await p.WhatToDo();
             }
-            Console.Write("User ID: ");
+            Console.Write("Channel ID: ");
             try
             {
-                userId = ulong.Parse(Console.ReadLine());
+                channelId = ulong.Parse(Console.ReadLine());
             }
             catch
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Error! Type valid user ID.");
+                Console.WriteLine("Error! Type valid channel ID.");
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.ReadKey();
                 Console.Clear();
                 await p.WhatToDo();
             }
-            Console.Write("Role ID: ");
+            Console.Write("New channel name: ");
             try
             {
-                roleId = ulong.Parse(Console.ReadLine());
+                name = Console.ReadLine();
             }
             catch
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Error! Type valid role ID.");
+                Console.WriteLine("Error! Type valid channel name.");
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.ReadKey();
                 Console.Clear();
@@ -62,12 +62,7 @@ namespace DiscordExecutor.functions
             }
             try
             {
-                IRole role = Program.client.GetGuild(guildId).GetRole(roleId);
-                IGuild guild = Program.client.GetGuild(guildId);
-                await guild.DownloadUsersAsync();
-                IGuildUser guildUser = guild.GetUserAsync(userId).Result;
-
-                await guildUser.AddRoleAsync(role);
+                await Program.client.GetGuild(guildId).GetChannel(channelId).ModifyAsync(x => { x.Name = name; });
                 await p.WhatToDo();
             }
             catch (Exception ex)

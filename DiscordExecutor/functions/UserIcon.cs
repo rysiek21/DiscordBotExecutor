@@ -7,17 +7,16 @@ using System.Threading.Tasks;
 
 namespace DiscordExecutor.functions
 {
-    class Kick
+    class UserIcon
     {
         Program p = new Program();
-        /////////////////
-        //  Kick user  //
-        /////////////////
-        public async Task KickUser()
+        ///////////////////////
+        //  Get User Avatar  //
+        ///////////////////////
+        public async Task GetUserIcon()
         {
             ulong guildId = 0;
             ulong userId = 0;
-            string reason = "";
             Console.Write("Guild ID: ");
             try
             {
@@ -46,48 +45,22 @@ namespace DiscordExecutor.functions
                 Console.Clear();
                 await p.WhatToDo();
             }
-            Console.Write("Reason: ");
-            try
-            {
-                reason = Console.ReadLine();
-            }
-            catch
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Error! Type valid reason.");
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.ReadKey();
-                Console.Clear();
-                await p.WhatToDo();
-            }
             try
             {
                 IGuild guild = Program.client.GetGuild(guildId);
                 await guild.DownloadUsersAsync();
                 IGuildUser guildUser = guild.GetUserAsync(userId).Result;
-                await guildUser.KickAsync(reason);
+                Console.WriteLine(guildUser.GetAvatarUrl(ImageFormat.Gif, 2048));
                 await p.WhatToDo();
             }
-            catch (Exception ex)
+            catch
             {
-                if (ex.Message == "The server responded with error 403: Forbidden")
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Error! Insufficient permissions.");
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.ReadKey();
-                    Console.Clear();
-                    await p.WhatToDo();
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Error! Invalid data.");
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.ReadKey();
-                    Console.Clear();
-                    await p.WhatToDo();
-                }
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Error! Invalid data.");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.ReadKey();
+                Console.Clear();
+                await p.WhatToDo();
             }
         }
     }

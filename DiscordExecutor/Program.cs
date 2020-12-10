@@ -44,6 +44,7 @@ namespace DiscordExecutor
                 await Connect();
             }
             while (client.ConnectionState != ConnectionState.Connected) { }
+            Console.Clear();
             await WhatToDo();
         }
         public async Task WhatToDo()
@@ -59,6 +60,9 @@ namespace DiscordExecutor
                 Console.WriteLine("change name - Change nickname for specific user");
                 Console.WriteLine("ban - Ban specific user");
                 Console.WriteLine("kick -  Kick specific user");
+                Console.WriteLine("embed -  Send embed message on the specific channel");
+                Console.WriteLine("change channel name -  Change name of the specific channel");
+                Console.WriteLine("user icon -  Get link to the avatar of specific user");
                 Console.ForegroundColor = ConsoleColor.White;
                 await WhatToDo();
             }
@@ -91,6 +95,21 @@ namespace DiscordExecutor
             {
                 functions.Kick e = new functions.Kick();
                 await e.KickUser();
+            }
+            else if (what == "embed")
+            {
+                functions.Embed e = new functions.Embed();
+                await e.SendEmbed();
+            }
+            else if (what == "change channel name")
+            {
+                functions.ChangeChannelName e = new functions.ChangeChannelName();
+                await e.ChangeChannelNameFunc();
+            }
+            else if (what == "user icon")
+            {
+                functions.UserIcon e = new functions.UserIcon();
+                await e.GetUserIcon();
             }
             else
             {

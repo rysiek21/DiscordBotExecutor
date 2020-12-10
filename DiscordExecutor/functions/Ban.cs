@@ -92,14 +92,26 @@ namespace DiscordExecutor.functions
                 await guildUser.BanAsync(purgeDays, reason);
                 await p.WhatToDo();
             }
-            catch
+            catch (Exception ex)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Error! Invalid data.");
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.ReadKey();
-                Console.Clear();
-                await p.WhatToDo();
+                if (ex.Message == "The server responded with error 403: Forbidden")
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Error! Insufficient permissions.");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.ReadKey();
+                    Console.Clear();
+                    await p.WhatToDo();
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Error! Invalid data.");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.ReadKey();
+                    Console.Clear();
+                    await p.WhatToDo();
+                }
             }
         }
     }
